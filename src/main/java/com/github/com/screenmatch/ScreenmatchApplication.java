@@ -1,5 +1,6 @@
 package com.github.com.screenmatch;
 
+import com.github.com.screenmatch.models.Episodio;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.services.ConsumoApi;
 import com.github.com.screenmatch.services.ConverteDados;
@@ -22,13 +23,17 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-	//	final ConsumoApi consumoApi = new ConsumoApi();
-		String json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&apikey=6585022c"); // &Season=1
+
+		String json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&apikey=6585022c");
 //		System.out.println(json);
 //		json = consumoApi.obterDados("https://coffee.alexflipnote.dev/random.json");
-		// System.out.println(json);
+
 		final ConverteDados conversor = new ConverteDados();
 		final Serie serie = conversor.obterDados(json , Serie.class);
 		System.out.println(serie);
+
+		json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&Season=1&episode=2&apikey=6585022c");
+		final Episodio episodio = conversor.obterDados(json , Episodio.class);
+		System.out.println(episodio);
 	}
 }
