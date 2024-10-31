@@ -13,7 +13,7 @@ public class Principal {
     private final ConsumoApi consumoApi;
     private final ConverteDados conversor;
     private final Scanner sc = new Scanner(System.in);
-    private static final String API_KEY = "6585022c";
+    private static final String API_KEY = System.getenv("YOUR_API_KEY");
     private static final String URL = "https://www.omdbapi.com/?t=";
 
     public Principal(ConsumoApi consumoApi , ConverteDados conversor) {
