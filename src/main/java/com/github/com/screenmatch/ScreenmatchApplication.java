@@ -21,15 +21,7 @@ public class ScreenmatchApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		System.out.println("\n" + principal.exibeMenu());
-
-//		final List<Temporada> temporadass = new ArrayList<>();
-//		for (int i = 1; i <= serie.totalTemporadas(); i++) {
-//			json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&Season=" + i + "&apikey=6585022c");
-//			final Temporada temporada = conversor.obterDados(json , Temporada.class);
-//			temporadass.add(temporada);
-//		}
-//		temporadass.forEach(System.out::println);
+		principal.exibeMenu();
 
 	}
 }
