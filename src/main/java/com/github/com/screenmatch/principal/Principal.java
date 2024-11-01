@@ -1,5 +1,6 @@
 package com.github.com.screenmatch.principal;
 
+import com.github.com.screenmatch.models.Episodio;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.models.Temporada;
 import com.github.com.screenmatch.services.ConsumoApi;
@@ -32,14 +33,31 @@ public class Principal {
         final Serie serie = conversor.obterDados(json , Serie.class);
         System.out.println(serie);
 
-        final List<Temporada> temporadass = new ArrayList<>();
+        System.out.println();
+
+        final List<Temporada> temporadas = new ArrayList<>();
         for (int i = 1; i <= serie.totalTemporadas(); i++) {
             final String uri2 = URL + nomeSerie.replace(" " , "+") + "&season=" + i + "&apikey=" + API_KEY;
             json = consumoApi.obterDados(uri2);
             final Temporada temporada = conversor.obterDados(json , Temporada.class);
-            temporadass.add(temporada);
+            temporadas.add(temporada);
         }
-        temporadass.forEach(System.out::println);
+        temporadas.forEach(System.out::println);
+        System.out.println();
+
+        for (int i = 0 ; i < serie.totalTemporadas() ; i++) {
+            System.out.println(temporadas.get(i).numero());
+
+            final List<Episodio> episodios = temporadas.get(i).episodios();
+
+            for (int j = 0 ; j < episodios.size() ; j++) {
+                System.out.println(episodios.get(j).titulo());
+            }
+            System.out.println();
+        }
+
+        System.out.println();
+        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo()))) ;
     }
 
 }
