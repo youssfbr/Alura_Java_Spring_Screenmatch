@@ -1,6 +1,6 @@
 package com.github.com.screenmatch.principal;
 
-import com.github.com.screenmatch.models.Episodio;
+import com.github.com.screenmatch.models.DadosEpisodio;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.models.Temporada;
 import com.github.com.screenmatch.services.ConsumoApi;
@@ -50,33 +50,33 @@ public class Principal {
         for (int i = 0 ; i < serie.totalTemporadas() ; i++) {
             System.out.println(temporadas.get(i).numero());
 
-            final List<Episodio> episodios = temporadas.get(i).episodios();
+            final List<DadosEpisodio> dadosEpisodios = temporadas.get(i).dadosEpisodios();
 
-            for (int j = 0 ; j < episodios.size() ; j++) {
-                System.out.println(episodios.get(j).titulo());
+            for (int j = 0; j < dadosEpisodios.size() ; j++) {
+                System.out.println(dadosEpisodios.get(j).titulo());
             }
             System.out.println();
         }
 
         System.out.println();
-        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo()))) ;
+        temporadas.forEach(t -> t.dadosEpisodios().forEach(e -> System.out.println(e.titulo()))) ;
 
         System.out.println();
         System.out.println("flatMap");
-        final List<Episodio> dadosEpisodios = temporadas.stream()
-                .flatMap(t -> t.episodios().stream())
+        final List<DadosEpisodio> dadosDadosEpisodios = temporadas.stream()
+                .flatMap(t -> t.dadosEpisodios().stream())
                         .collect(Collectors.toList());
                 //.toList();
 
         //System.out.println(dadosEpisodios);
 
         // dadosEpisodios.add(new Episodio("teste", 3, "10", "2020-01-01"));
-        dadosEpisodios.forEach(System.out::println);
+        dadosDadosEpisodios.forEach(System.out::println);
 
         System.out.println("\nTop 5 episódios");
-        dadosEpisodios.stream()
+        dadosDadosEpisodios.stream()
                 .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
-                .sorted(Comparator.comparing(Episodio::avaliacao).reversed())
+                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
                 .limit(5)
                 .forEach(System.out::println);
     }
