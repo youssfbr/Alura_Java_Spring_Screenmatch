@@ -1,6 +1,7 @@
 package com.github.com.screenmatch.principal;
 
 import com.github.com.screenmatch.models.DadosEpisodio;
+import com.github.com.screenmatch.models.Episodio;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.models.Temporada;
 import com.github.com.screenmatch.services.ConsumoApi;
@@ -66,11 +67,7 @@ public class Principal {
         final List<DadosEpisodio> dadosDadosEpisodios = temporadas.stream()
                 .flatMap(t -> t.dadosEpisodios().stream())
                         .collect(Collectors.toList());
-                //.toList();
-
-        //System.out.println(dadosEpisodios);
-
-        // dadosEpisodios.add(new Episodio("teste", 3, "10", "2020-01-01"));
+                //.toList(); // Fica imutável
         dadosDadosEpisodios.forEach(System.out::println);
 
         System.out.println("\nTop 5 episódios");
@@ -79,6 +76,14 @@ public class Principal {
                 .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
                 .limit(5)
                 .forEach(System.out::println);
+
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.dadosEpisodios().stream()
+                        .map(d -> new Episodio(t.numero(), d))
+                ).collect(Collectors.toList());
+
+        System.out.println();
+        episodios.forEach(System.out::println);
     }
 
 }
