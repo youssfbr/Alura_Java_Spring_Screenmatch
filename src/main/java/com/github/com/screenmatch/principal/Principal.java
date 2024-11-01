@@ -8,8 +8,10 @@ import com.github.com.screenmatch.services.ConverteDados;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @Service
 public class Principal {
@@ -58,6 +60,25 @@ public class Principal {
 
         System.out.println();
         temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo()))) ;
+
+        System.out.println();
+        System.out.println("flatMap");
+        final List<Episodio> dadosEpisodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream())
+                        .collect(Collectors.toList());
+                //.toList();
+
+        //System.out.println(dadosEpisodios);
+
+        // dadosEpisodios.add(new Episodio("teste", 3, "10", "2020-01-01"));
+        dadosEpisodios.forEach(System.out::println);
+
+        System.out.println("\nTop 5 episódios");
+        dadosEpisodios.stream()
+                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+                .sorted(Comparator.comparing(Episodio::avaliacao).reversed())
+                .limit(5)
+                .forEach(System.out::println);
     }
 
 }
