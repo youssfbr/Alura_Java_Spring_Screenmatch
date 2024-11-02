@@ -76,13 +76,20 @@ public class Principal {
 //                .limit(5)
 //                .forEach(System.out::println);
 //
-//        List<Episodio> episodios = temporadas.stream()
-//                .flatMap(t -> t.dadosEpisodios().stream()
-//                        .map(d -> new Episodio(t.numero(), d))
-//                ).collect(Collectors.toList());
-//
-//        System.out.println();
-//        episodios.forEach(System.out::println);
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.dadosEpisodios().stream()
+                        .map(d -> new Episodio(t.numero(), d))
+                ).collect(Collectors.toList());
+
+        System.out.println();
+        episodios.forEach(System.out::println);
+
+        System.out.println("Digite um trecho do título do episodio");
+        String trechoTitulo = sc.nextLine();
+        final Optional<Episodio> episodioBuscado = episodios.stream()
+                .filter(e -> e.getTitulo().toLowerCase().contains(trechoTitulo.toLowerCase()))
+                .findFirst();
+        System.out.println(episodioBuscado);
 //
 //        // Buscando pela data a partir de...
 //        System.out.println("\nA partir de que ano você deseja ver os episódios?");
@@ -101,28 +108,28 @@ public class Principal {
 //                                "Data lançamento: " + e.getDataLancamento().format(formatador)
 //                ));
 //
-        System.out.println("\nTop 10 episódios");
-        dadosDadosEpisodios.stream()
-                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
-                .peek(e -> System.out.println("Primeiro filtro (N/A) " + e))
-                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
-                .peek(e -> System.out.println("Ordenação " + e))
-                .limit(10)
-                .peek(e -> System.out.println("Limite " + e))
-                .map(e -> e.titulo().toUpperCase())
-                .peek(e -> System.out.println("Mapeamento " + e))
-                .forEach(System.out::println);
+//        System.out.println("\nTop 10 episódios");
+//        dadosDadosEpisodios.stream()
+//                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+//                .peek(e -> System.out.println("Primeiro filtro (N/A) " + e))
+//                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
+//                .peek(e -> System.out.println("Ordenação " + e))
+//                .limit(10)
+//                .peek(e -> System.out.println("Limite " + e))
+//                .map(e -> e.titulo().toUpperCase())
+//                .peek(e -> System.out.println("Mapeamento " + e))
+//                .forEach(System.out::println);
 
-        System.out.println("\nNúmeros");
-        List<Integer> numeros = Arrays.asList(1, 2, 3, 4, 5);
-
-        int soma = numeros.stream()
-                .peek(n -> System.out.println("Elemento: " + n))
-                .map(n -> n * 2)
-                .peek(n -> System.out.println("Conteúdo depois do map: " + n))
-                .reduce(0, (total, numero) -> total + numero);
-
-        System.out.println("A soma dos números é: " + soma);
+//        System.out.println("\nNúmeros");
+//        List<Integer> numeros = Arrays.asList(1, 2, 3, 4, 5);
+//
+//        int soma = numeros.stream()
+//                .peek(n -> System.out.println("Elemento: " + n))
+//                .map(n -> n * 2)
+//                .peek(n -> System.out.println("Conteúdo depois do map: " + n))
+//                .reduce(0, (total, numero) -> total + numero);
+//
+//        System.out.println("A soma dos números é: " + soma);
     }
 
 
