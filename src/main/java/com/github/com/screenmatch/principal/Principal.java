@@ -8,6 +8,8 @@ import com.github.com.screenmatch.services.ConsumoApi;
 import com.github.com.screenmatch.services.ConverteDados;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -84,6 +86,23 @@ public class Principal {
 
         System.out.println();
         episodios.forEach(System.out::println);
+
+        // Buscando pela data a partir de...
+        System.out.println("\nA partir de que ano você deseja ver os episódios?");
+        final int ano = sc.nextInt();
+        sc.nextLine();
+
+        final LocalDate dataBusca = LocalDate.of(ano , 1 , 1);
+        System.out.println(dataBusca);
+
+        final DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        episodios.stream()
+                .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
+                .forEach(e -> System.out.println(
+                        "Temporada: " + e.getTemporada() +
+                                "Episódio: " + e.getTitulo() +
+                                "Data lançamento: " + e.getDataLancamento().format(formatador)
+                ));
     }
 
 }
