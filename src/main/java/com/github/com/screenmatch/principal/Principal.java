@@ -84,12 +84,12 @@ public class Principal {
         System.out.println();
         episodios.forEach(System.out::println);
 
-        System.out.println("Digite um trecho do título do episodio");
-        String trechoTitulo = sc.nextLine();
-        final Optional<Episodio> episodioBuscado = episodios.stream()
-                .filter(e -> e.getTitulo().toLowerCase().contains(trechoTitulo.toLowerCase()))
-                .findFirst();
-        System.out.println(episodioBuscado);
+//        System.out.println("Digite um trecho do título do episodio");
+//        String trechoTitulo = sc.nextLine();
+//        final Optional<Episodio> episodioBuscado = episodios.stream()
+//                .filter(e -> e.getTitulo().toLowerCase().contains(trechoTitulo.toLowerCase()))
+//                .findFirst();
+//        System.out.println(episodioBuscado);
 //
 //        // Buscando pela data a partir de...
 //        System.out.println("\nA partir de que ano você deseja ver os episódios?");
@@ -130,6 +130,31 @@ public class Principal {
 //                .reduce(0, (total, numero) -> total + numero);
 //
 //        System.out.println("A soma dos números é: " + soma);
+        // Avaliaçoes por temporada
+        System.out.println("\nAvaliaçoes por temporada");
+//        final Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+//                .collect(Collectors.groupingBy(Episodio::getTemporada,
+//                        Collectors.averagingDouble(Episodio::getAvaliacao)));
+//        System.out.println(avaliacoesPorTemporada);
+
+        episodios.forEach(x -> {
+            System.out.print(x.getTemporada());
+            System.out.print(" | ");
+            System.out.print(x.getNumeroEpisodio());
+            System.out.print(" | ");
+            System.out.println(x.getAvaliacao());
+        });
+
+        System.out.println("\nAvaliaçoes por temporada");
+        final Map<Integer, Double> collect = episodios.stream()
+                .filter(e -> e.getAvaliacao() != null)
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(
+                        Collectors.groupingBy(Episodio::getTemporada ,
+                                Collectors.averagingDouble(Episodio::getAvaliacao))
+                );
+        System.out.println(collect);
+
     }
 
 
