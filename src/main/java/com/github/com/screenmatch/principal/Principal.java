@@ -1,17 +1,13 @@
 package com.github.com.screenmatch.principal;
 
-import com.github.com.screenmatch.models.DadosEpisodio;
-import com.github.com.screenmatch.models.Episodio;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.models.Temporada;
 import com.github.com.screenmatch.services.ConsumoApi;
 import com.github.com.screenmatch.services.ConverteDados;
+import com.github.com.screenmatch.utils.Mensagens;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class Principal {
@@ -21,6 +17,7 @@ public class Principal {
     private final Scanner sc = new Scanner(System.in);
     private static final String URL = "https://www.omdbapi.com/?t=";
     private static final String API_KEY = System.getenv("YOUR_API_KEY");
+    private final List<Serie> dadosSeries = new ArrayList<>();
 
     public Principal(ConsumoApi consumoApi , ConverteDados conversor) {
         this.consumoApi = consumoApi;
@@ -28,15 +25,64 @@ public class Principal {
     }
 
     public void exibeMenu() {
+        int opcao = -1;
+        while (opcao != 0) {
+            System.out.println(Mensagens.MENSAGENS_OPCOES);
+            opcao = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcao) {
+                case 0 -> System.out.println("Saindo...");
+                case 1 -> buscarSerieWeb();
+                case 2 -> buscarEpisodioPorSerie();
+                case 3 -> listarSeriesBuscadas();
+                default -> System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    private void buscarSerieWeb() {
+        Serie dados = getDadosSerie();
+        dadosSeries.add(dados);
+        System.out.println(dados);
+    }
+
+    private Serie getDadosSerie() {
         System.out.print("\nDigite o nome da série para busca: ");
         String nomeSerie = sc.nextLine();
         String uri = URL + nomeSerie.replace(" " , "+") + "&apikey=" + API_KEY;
         var json = consumoApi.obterDados(uri);
-        final Serie serie = conversor.obterDados(json , Serie.class);
-        System.out.println(serie);
+        return conversor.obterDados(json , Serie.class);
+    }
 
-        System.out.println();
+    private void buscarEpisodioPorSerie() {
+        final Serie dadosSerie = getDadosSerie();
+        final List<Temporada> temporadas = new ArrayList<>();
 
+        for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
+            final String endereco = URL + dadosSerie.titulo().replace(" " , "+") + "&season=" + i + "&apikey=" + API_KEY;
+            var json = consumoApi.obterDados(endereco);
+
+            final Temporada dadosTemporada = conversor.obterDados(json , Temporada.class);
+            temporadas.add(dadosTemporada);
+        }
+        temporadas.forEach(System.out::println);
+    }
+
+    private void listarSeriesBuscadas() {
+        if (!dadosSeries.isEmpty()) {
+            dadosSeries.forEach(System.out::println);
+        } else {
+            System.out.println("Não há Dados na lista para exibir");
+        }
+    }
+
+
+
+
+    // ---------------------------------------------------------------------------------------------------------------------
+    private void comentariosParaEstudar() {
+        /*
         final List<Temporada> temporadas = new ArrayList<>();
         for (int i = 1; i <= serie.totalTemporadas(); i++) {
             final String uri2 = URL + nomeSerie.replace(" " , "+") + "&season=" + i + "&apikey=" + API_KEY;
@@ -165,7 +211,6 @@ public class Principal {
         System.out.println("Melhor episodio: " + est.getMax());
         System.out.println("Pior episodio: " + est.getMin());
         System.out.println("Quantidade: " + est.getCount());
+         */
     }
-
-
 }
