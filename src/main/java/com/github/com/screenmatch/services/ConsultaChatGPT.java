@@ -23,6 +23,6 @@ public class ConsultaChatGPT {
                 .build();
 
         var resposta = service.createCompletion(requisicao);
-        return resposta.getChoices().get(0).getText();
+        return resposta.getChoices().get(0).getText().trim();
     }
 }

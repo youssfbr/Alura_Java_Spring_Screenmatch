@@ -2,6 +2,7 @@ package com.github.com.screenmatch.models;
 
 import com.github.com.screenmatch.models.enums.Categoria;
 import com.github.com.screenmatch.services.ConsultaChatGPT;
+import com.github.com.screenmatch.utils.ConsultaMyMemory;
 import com.theokanning.openai.OpenAiHttpException;
 
 import java.util.OptionalDouble;
@@ -80,8 +81,10 @@ public class Serie {
 
     public void setSinopse(String sinopse) {
         try {
-            this.sinopse = ConsultaChatGPT.obterTraducao(sinopse).trim();
+            this.sinopse = ConsultaChatGPT.obterTraducao(sinopse);
         } catch (OpenAiHttpException e) {
+            this.sinopse = ConsultaMyMemory.obterTraducao(sinopse);
+        } catch (Exception e) {
             this.sinopse = sinopse;
         }
     }
