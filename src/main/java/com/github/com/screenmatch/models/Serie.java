@@ -1,6 +1,8 @@
 package com.github.com.screenmatch.models;
 
 import com.github.com.screenmatch.models.enums.Categoria;
+import com.github.com.screenmatch.services.ConsultaChatGPT;
+import com.theokanning.openai.OpenAiHttpException;
 
 import java.util.OptionalDouble;
 
@@ -21,7 +23,7 @@ public class Serie {
         genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
         atores = dadosSerie.atores();
         poster = dadosSerie.poster();
-        sinopse = dadosSerie.sinopse();
+        setSinopse(dadosSerie.sinopse());
     }
 
     public String getTitulo() {
@@ -77,7 +79,11 @@ public class Serie {
     }
 
     public void setSinopse(String sinopse) {
-        this.sinopse = sinopse;
+        try {
+            this.sinopse = ConsultaChatGPT.obterTraducao(sinopse).trim();
+        } catch (OpenAiHttpException e) {
+            this.sinopse = sinopse;
+        }
     }
 
     @Override

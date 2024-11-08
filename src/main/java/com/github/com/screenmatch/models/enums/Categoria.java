@@ -4,10 +4,12 @@ public enum Categoria {
 
     ACAO ("Action") ,
     AVENTURA ("Adventure") ,
+    ANIMACAO ("Animation") ,
     ROMANCE ("Romance") ,
     COMEDIA ("Comedy") ,
     DRAMA ("Drama") ,
-    CRIME ("Crime") ;
+    CRIME ("Crime") ,
+    CURTO ("Short") ;
 
     private final String categoriaOmdb;
 
