@@ -5,6 +5,7 @@ import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.models.Temporada;
 import com.github.com.screenmatch.services.ConsumoApi;
 import com.github.com.screenmatch.services.ConverteDados;
+import com.github.com.screenmatch.services.ISerieService;
 import com.github.com.screenmatch.utils.Mensagens;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,12 @@ public class Principal {
     private static final String URL = "https://www.omdbapi.com/?t=";
     private static final String API_KEY = System.getenv("YOUR_API_KEY");
     private final List<DadosSerie> dadosSeries = new ArrayList<>();
+    private final ISerieService serieService;
 
-    public Principal(ConsumoApi consumoApi , ConverteDados conversor) {
+    public Principal(ConsumoApi consumoApi , ConverteDados conversor , ISerieService serieService) {
         this.consumoApi = consumoApi;
         this.conversor = conversor;
+        this.serieService = serieService;
     }
 
     public void exibeMenu() {
@@ -47,7 +50,8 @@ public class Principal {
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+      //  dadosSeries.add(dados);
+        serieService.criarSerie(dados);
         System.out.println(dados);
     }
 

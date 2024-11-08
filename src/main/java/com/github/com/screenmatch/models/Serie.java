@@ -4,18 +4,34 @@ import com.github.com.screenmatch.models.enums.Categoria;
 import com.github.com.screenmatch.services.ConsultaChatGPT;
 import com.github.com.screenmatch.utils.ConsultaMyMemory;
 import com.theokanning.openai.OpenAiHttpException;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalDouble;
 
+@Entity
+@Table(name = "tb_series")
 public class Serie {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(unique = true)
     private String titulo ;
     private Integer totalTemporadas ;
     private Double avaliacao ;
+
+    @Enumerated(EnumType.STRING)
     private Categoria genero ;
+
     private String atores ;
     private String poster ;
     private String sinopse ;
+
+    @Transient
+    private final List<Episodio> episodios = new ArrayList<>();
 
     public Serie(DadosSerie dadosSerie) {
         titulo = dadosSerie.titulo();
@@ -25,6 +41,14 @@ public class Serie {
         atores = dadosSerie.atores();
         poster = dadosSerie.poster();
         setSinopse(dadosSerie.sinopse());
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -87,6 +111,10 @@ public class Serie {
         } catch (Exception e) {
             this.sinopse = sinopse;
         }
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
     }
 
     @Override

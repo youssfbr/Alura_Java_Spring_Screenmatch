@@ -2,6 +2,10 @@ package com.github.com.screenmatch.utils;
 
 public class Mensagens {
 
+    private Mensagens() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static final String MENSAGENS_OPCOES =
             """
                         

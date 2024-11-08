@@ -9,6 +9,11 @@ import com.github.com.screenmatch.services.ConsumoApi;
 import java.net.URLEncoder;
 
 public class ConsultaMyMemory {
+
+    private ConsultaMyMemory() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static String obterTraducao(String text) {
         ObjectMapper mapper = new ObjectMapper();
 
