@@ -1,5 +1,6 @@
 package com.github.com.screenmatch.principal;
 
+import com.github.com.screenmatch.models.DadosSerie;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.models.Temporada;
 import com.github.com.screenmatch.services.ConsumoApi;
@@ -7,7 +8,10 @@ import com.github.com.screenmatch.services.ConverteDados;
 import com.github.com.screenmatch.utils.Mensagens;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 
 @Service
 public class Principal {
@@ -17,7 +21,7 @@ public class Principal {
     private final Scanner sc = new Scanner(System.in);
     private static final String URL = "https://www.omdbapi.com/?t=";
     private static final String API_KEY = System.getenv("YOUR_API_KEY");
-    private final List<Serie> dadosSeries = new ArrayList<>();
+    private final List<DadosSerie> dadosSeries = new ArrayList<>();
 
     public Principal(ConsumoApi consumoApi , ConverteDados conversor) {
         this.consumoApi = consumoApi;
@@ -42,21 +46,21 @@ public class Principal {
     }
 
     private void buscarSerieWeb() {
-        Serie dados = getDadosSerie();
+        DadosSerie dados = getDadosSerie();
         dadosSeries.add(dados);
         System.out.println(dados);
     }
 
-    private Serie getDadosSerie() {
+    private DadosSerie getDadosSerie() {
         System.out.print("\nDigite o nome da série para busca: ");
         String nomeSerie = sc.nextLine();
         String uri = URL + nomeSerie.replace(" " , "+") + "&apikey=" + API_KEY;
         var json = consumoApi.obterDados(uri);
-        return conversor.obterDados(json , Serie.class);
+        return conversor.obterDados(json , DadosSerie.class);
     }
 
     private void buscarEpisodioPorSerie() {
-        final Serie dadosSerie = getDadosSerie();
+        final DadosSerie dadosSerie = getDadosSerie();
         final List<Temporada> temporadas = new ArrayList<>();
 
         for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
@@ -70,8 +74,12 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
+
         if (!dadosSeries.isEmpty()) {
-            dadosSeries.forEach(System.out::println);
+            dadosSeries.stream()
+                    .map(Serie::new)
+                    .sorted(Comparator.comparing(Serie::getGenero))
+                    .forEach(System.out::println);
         } else {
             System.out.println("Não há Dados na lista para exibir");
         }
