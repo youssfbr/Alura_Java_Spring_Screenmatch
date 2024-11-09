@@ -1,18 +1,18 @@
 package com.github.com.screenmatch.principal;
 
 import com.github.com.screenmatch.models.DadosSerie;
+import com.github.com.screenmatch.models.Episodio;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.models.Temporada;
+import com.github.com.screenmatch.repositories.ISerieRepository;
 import com.github.com.screenmatch.services.ConsumoApi;
 import com.github.com.screenmatch.services.ConverteDados;
 import com.github.com.screenmatch.services.ISerieService;
 import com.github.com.screenmatch.utils.Mensagens;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class Principal {
@@ -22,13 +22,15 @@ public class Principal {
     private final Scanner sc = new Scanner(System.in);
     private static final String URL = "https://www.omdbapi.com/?t=";
     private static final String API_KEY = System.getenv("YOUR_API_KEY");
-   // private final List<DadosSerie> dadosSeries = new ArrayList<>();
+    private List<Serie> series = new ArrayList<>();
     private final ISerieService serieService;
+    private final ISerieRepository serieRepository;
 
-    public Principal(ConsumoApi consumoApi , ConverteDados conversor , ISerieService serieService) {
+    public Principal(ConsumoApi consumoApi , ConverteDados conversor , ISerieService serieService , ISerieRepository serieRepository) {
         this.consumoApi = consumoApi;
         this.conversor = conversor;
         this.serieService = serieService;
+        this.serieRepository = serieRepository;
     }
 
     public void exibeMenu() {
@@ -50,7 +52,6 @@ public class Principal {
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-      //  dadosSeries.add(dados);
         serieService.criarSerie(dados);
         System.out.println(dados);
     }
@@ -64,32 +65,44 @@ public class Principal {
     }
 
     private void buscarEpisodioPorSerie() {
-        final DadosSerie dadosSerie = getDadosSerie();
-        final List<Temporada> temporadas = new ArrayList<>();
+        listarSeriesBuscadas();
+        System.out.println("Escolha uma série pelo nome: ");
+        final String nomeSerie = sc.nextLine();
 
-        for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
-            final String endereco = URL + dadosSerie.titulo().replace(" " , "+") + "&season=" + i + "&apikey=" + API_KEY;
-            var json = consumoApi.obterDados(endereco);
+        final Optional<Serie> serie = series.stream()
+                .filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
+                .findFirst();
 
-            final Temporada dadosTemporada = conversor.obterDados(json , Temporada.class);
-            temporadas.add(dadosTemporada);
+        if (serie.isPresent()) {
+            final Serie serieEncontrada = serie.get();
+            final List<Temporada> temporadas = new ArrayList<>();
+
+            for (int i = 1; i <= serieEncontrada.getTotalTemporadas(); i++) {
+                final String endereco = URL + serieEncontrada.getTitulo().replace(" " , "+") + "&season=" + i + "&apikey=" + API_KEY;
+                var json = consumoApi.obterDados(endereco);
+
+                final Temporada dadosTemporada = conversor.obterDados(json , Temporada.class);
+                temporadas.add(dadosTemporada);
+            }
+            temporadas.forEach(System.out::println);
+
+            final List<Episodio> episodios = temporadas.stream()
+                    .flatMap(dadosTemporada -> dadosTemporada.dadosEpisodios().stream()
+                            .map(episodio -> new Episodio(dadosTemporada.numero() , episodio))).collect(Collectors.toList());
+
+            serieEncontrada.setEpisodios(episodios);
+            System.out.println(serieEncontrada);
+            serieRepository.save(serieEncontrada);
+        } else {
+            System.out.println("Série não encontrada.");
         }
-        temporadas.forEach(System.out::println);
     }
 
     private void listarSeriesBuscadas() {
-        serieService.buscarSeries().stream()
+        series = serieService.buscarSeries();
+        series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
-
-//        if (!dadosSeries.isEmpty()) {
-//            dadosSeries.stream()
-//                    .map(Serie::new)
-//                    .sorted(Comparator.comparing(Serie::getGenero))
-//                    .forEach(System.out::println);
-//        } else {
-//            System.out.println("Não há Dados na lista para exibir");
-//        }
     }
 
 
