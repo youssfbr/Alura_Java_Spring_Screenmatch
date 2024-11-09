@@ -33,6 +33,8 @@ public class Serie {
     @Transient
     private final List<Episodio> episodios = new ArrayList<>();
 
+    public Serie() { }
+
     public Serie(DadosSerie dadosSerie) {
         titulo = dadosSerie.titulo();
         totalTemporadas = dadosSerie.totalTemporadas();

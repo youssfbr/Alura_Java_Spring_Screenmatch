@@ -22,7 +22,7 @@ public class Principal {
     private final Scanner sc = new Scanner(System.in);
     private static final String URL = "https://www.omdbapi.com/?t=";
     private static final String API_KEY = System.getenv("YOUR_API_KEY");
-    private final List<DadosSerie> dadosSeries = new ArrayList<>();
+   // private final List<DadosSerie> dadosSeries = new ArrayList<>();
     private final ISerieService serieService;
 
     public Principal(ConsumoApi consumoApi , ConverteDados conversor , ISerieService serieService) {
@@ -78,15 +78,18 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
+        serieService.buscarSeries().stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
 
-        if (!dadosSeries.isEmpty()) {
-            dadosSeries.stream()
-                    .map(Serie::new)
-                    .sorted(Comparator.comparing(Serie::getGenero))
-                    .forEach(System.out::println);
-        } else {
-            System.out.println("Não há Dados na lista para exibir");
-        }
+//        if (!dadosSeries.isEmpty()) {
+//            dadosSeries.stream()
+//                    .map(Serie::new)
+//                    .sorted(Comparator.comparing(Serie::getGenero))
+//                    .forEach(System.out::println);
+//        } else {
+//            System.out.println("Não há Dados na lista para exibir");
+//        }
     }
 
 

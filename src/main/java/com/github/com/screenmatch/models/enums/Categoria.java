@@ -5,6 +5,7 @@ public enum Categoria {
     ACAO ("Action") ,
     AVENTURA ("Adventure") ,
     ANIMACAO ("Animation") ,
+    DOCUMENTARIO ("Documentary") ,
     ROMANCE ("Romance") ,
     COMEDIA ("Comedy") ,
     DRAMA ("Drama") ,
