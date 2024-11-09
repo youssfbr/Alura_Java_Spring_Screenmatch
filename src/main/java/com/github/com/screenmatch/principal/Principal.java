@@ -45,9 +45,23 @@ public class Principal {
                 case 1 -> buscarSerieWeb();
                 case 2 -> buscarEpisodioPorSerie();
                 case 3 -> listarSeriesBuscadas();
+                case 4 -> buscarSeriePorTitulo();
                 default -> System.out.println("Opção inválida!");
             }
         }
+    }
+
+    private void buscarSeriePorTitulo() {
+        System.out.print("\nEscolha uma série pelo nome: ");
+        String nomeSerie = sc.nextLine();
+        final Optional<Serie> serieBuscada = serieRepository.findByTituloContainingIgnoreCase(nomeSerie);
+
+        if (serieBuscada.isPresent()) {
+            System.out.println("Dados da série: " + serieBuscada.get());
+        } else {
+            System.out.println("Série nao encontrada!");
+        }
+
     }
 
     private void buscarSerieWeb() {
@@ -69,9 +83,7 @@ public class Principal {
         System.out.println("Escolha uma série pelo nome: ");
         final String nomeSerie = sc.nextLine();
 
-        final Optional<Serie> serie = series.stream()
-                .filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
-                .findFirst();
+        final Optional<Serie> serie = serieRepository.findByTituloContainingIgnoreCase(nomeSerie);
 
         if (serie.isPresent()) {
             final Serie serieEncontrada = serie.get();

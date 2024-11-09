@@ -12,6 +12,7 @@ public class Mensagens {
                         1 - Buscar séries
                         2 - Buscar episodios
                         3 - Listar séries buscadas
+                        4 - Buscar série por título 
                         -
                         0 - Sair
                         """;
