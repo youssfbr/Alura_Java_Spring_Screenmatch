@@ -4,6 +4,7 @@ import com.github.com.screenmatch.models.DadosSerie;
 import com.github.com.screenmatch.models.Episodio;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.models.Temporada;
+import com.github.com.screenmatch.models.enums.Categoria;
 import com.github.com.screenmatch.repositories.ISerieRepository;
 import com.github.com.screenmatch.services.ConsumoApi;
 import com.github.com.screenmatch.services.ConverteDados;
@@ -49,9 +50,78 @@ public class Principal {
                 case 5 -> buscarSeriesPorAtor();
                 case 6 -> buscarSeriesPorAtorGreaterThanEquals();
                 case 7 -> buscarTop5Series();
+                case 8 -> buscarSeriesPorCategoria();
+                case 9 -> filtrarSeriesPorTemporadaEAvaliacao();
+                case 10 -> seriePorTemporadaEAvaliacaoSQL();
+                case 11 -> seriePorTemporadaEAvaliacaoJPQL();
+                case 12 -> buscarEpisodioPorTrecho();
                 default -> System.out.println("Opção inválida!");
             }
         }
+    }
+
+    private void buscarEpisodioPorTrecho() {
+        System.out.print("\nQual o nome do episódio para busca? : ");
+        String trechoEpisodio = sc.nextLine();
+        List<Episodio> episodiosEncontrados = serieRepository.episodiosPorTrecho(trechoEpisodio);
+
+        episodiosEncontrados.forEach(e ->
+                System.out.printf("Série: %s - Temporada %s - Episódio %s - %s\n" ,
+                        e.getSerie().getTitulo() ,
+                        e.getTemporada() ,
+                        e.getNumeroEpisodio() ,
+                        e.getTitulo()
+                )
+        );
+    }
+
+    private void seriePorTemporadaEAvaliacaoJPQL() {
+        System.out.println("Filtrar séries até quantas temporadas? ");
+        var totalTemporadas = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Com avaliação a partir de que valor? ");
+        var avaliacao = sc.nextDouble();
+        sc.nextLine();
+        final List<Serie> filtroSeries = serieRepository.seriesPorTemporadaEAvaliacaoJPQL(totalTemporadas , avaliacao);
+        System.out.println("*** Séries filtradas ***");
+        filtroSeries.forEach(s ->
+                System.out.println(s.getTitulo() + "  - avaliação: " + s.getAvaliacao()));
+    }
+
+    private void seriePorTemporadaEAvaliacaoSQL() {
+        System.out.println("Filtrar séries até quantas temporadas? ");
+        var totalTemporadas = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Com avaliação a partir de que valor? ");
+        var avaliacao = sc.nextDouble();
+        sc.nextLine();
+        final List<Serie> filtroSeries = serieRepository.seriesPorTemporadaEAvaliacaoSQL(totalTemporadas , avaliacao);
+        System.out.println("*** Séries filtradas ***");
+        filtroSeries.forEach(s ->
+                System.out.println(s.getTitulo() + "  - avaliação: " + s.getAvaliacao()));
+    }
+
+    private void filtrarSeriesPorTemporadaEAvaliacao(){
+        System.out.println("Filtrar séries até quantas temporadas? ");
+        var totalTemporadas = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Com avaliação a partir de que valor? ");
+        var avaliacao = sc.nextDouble();
+        sc.nextLine();
+        final List<Serie> filtroSeries = serieRepository.findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(totalTemporadas, avaliacao);
+        System.out.println("*** Séries filtradas ***");
+        filtroSeries.forEach(s ->
+                System.out.println(s.getTitulo() + "  - avaliação: " + s.getAvaliacao()));
+    }
+
+
+    private void buscarSeriesPorCategoria() {
+        System.out.print("\nQual categoria/gênero deseja buscar?: ");
+        String nomeGenero = sc.nextLine();
+        Categoria categoria = Categoria.fromStringPortugues(nomeGenero);
+        final List<Serie> seriesPorCategoria = serieRepository.findByGenero(categoria);
+        System.out.println("\nSéries da categoria " + nomeGenero);
+        seriesPorCategoria.forEach(System.out::println);
     }
 
     private void buscarTop5Series() {
