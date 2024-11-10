@@ -46,9 +46,31 @@ public class Principal {
                 case 2 -> buscarEpisodioPorSerie();
                 case 3 -> listarSeriesBuscadas();
                 case 4 -> buscarSeriePorTitulo();
+                case 5 -> buscarSeriesPorAtor();
+                case 6 -> buscarSeriesPorAtorGreaterThanEquals();
                 default -> System.out.println("Opção inválida!");
             }
         }
+    }
+
+    private void buscarSeriesPorAtorGreaterThanEquals() {
+        System.out.print("\nQual o nome do ator para busca: ");
+        String nomeAtor = sc.nextLine();
+        System.out.print("\nAvaliacoes a partir de que valor: ");
+        Double avaliacao = sc.nextDouble();
+        final List<Serie> seriesEncontradas = serieRepository.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual (nomeAtor , avaliacao);
+        System.out.println("\nSéries em que " + nomeAtor + " trabalhou: ");
+        seriesEncontradas.forEach(s ->
+                System.out.println(s.getTitulo() + " - avaliação: " + s.getAvaliacao()));
+    }
+
+    private void buscarSeriesPorAtor() {
+        System.out.print("\nQual o nome do ator para busca: ");
+        String nomeAtor = sc.nextLine();
+        final List<Serie> seriesEncontradas = serieRepository.findByAtoresContainingIgnoreCase(nomeAtor);
+        System.out.println("\nSéries em que " + nomeAtor + " trabalhou: ");
+        seriesEncontradas.forEach(s ->
+                System.out.println(s.getTitulo() + " - avaliação: " + s.getAvaliacao()));
     }
 
     private void buscarSeriePorTitulo() {
