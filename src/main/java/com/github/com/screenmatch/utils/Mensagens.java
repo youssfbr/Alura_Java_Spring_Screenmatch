@@ -14,7 +14,8 @@ public class Mensagens {
                         3 - Listar séries buscadas
                         4 - Buscar série por título
                         5 - Buscar séries por ator
-                        5 - Buscar séries por ator com avaliação
+                        6 - Buscar séries por ator com avaliação
+                        7 - Top 5 Séries
                         -
                         0 - Sair
                         """;

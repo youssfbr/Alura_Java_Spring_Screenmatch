@@ -48,9 +48,16 @@ public class Principal {
                 case 4 -> buscarSeriePorTitulo();
                 case 5 -> buscarSeriesPorAtor();
                 case 6 -> buscarSeriesPorAtorGreaterThanEquals();
+                case 7 -> buscarTop5Series();
                 default -> System.out.println("Opção inválida!");
             }
         }
+    }
+
+    private void buscarTop5Series() {
+        final List<Serie> seriesTop = serieRepository.findTop5ByOrderByAvaliacaoDesc();
+        seriesTop.forEach(s ->
+                System.out.println(s.getTitulo() + " - avaliação: " + s.getAvaliacao()));
     }
 
     private void buscarSeriesPorAtorGreaterThanEquals() {
