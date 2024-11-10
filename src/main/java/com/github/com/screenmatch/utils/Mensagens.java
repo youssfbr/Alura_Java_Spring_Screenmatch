@@ -21,6 +21,7 @@ public class Mensagens {
                         10 - Series filtradas por SQL
                         11 - Series filtradas por JPQL
                         12 - Buscar Episodios por trecho
+                        13 - Top Episódios por série
                         -
                         0 - Sair
                         """;

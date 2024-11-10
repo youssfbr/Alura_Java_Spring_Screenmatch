@@ -24,6 +24,7 @@ public class Principal {
     private static final String URL = "https://www.omdbapi.com/?t=";
     private static final String API_KEY = System.getenv("YOUR_API_KEY");
     private List<Serie> series = new ArrayList<>();
+    private Optional<Serie> serieBuscada;
     private final ISerieService serieService;
     private final ISerieRepository serieRepository;
 
@@ -55,8 +56,28 @@ public class Principal {
                 case 10 -> seriePorTemporadaEAvaliacaoSQL();
                 case 11 -> seriePorTemporadaEAvaliacaoJPQL();
                 case 12 -> buscarEpisodioPorTrecho();
+                case 13 -> topEpisodiosPorSerie();
                 default -> System.out.println("Opção inválida!");
             }
+        }
+    }
+
+    private void topEpisodiosPorSerie() {
+        buscarSeriePorTitulo();
+        if (serieBuscada.isPresent()) {
+            final Serie serie = serieBuscada.get();
+            List<Episodio> topEpisodios = serieRepository.topEpisodiosPorSerie(serie);
+
+            System.out.println();
+            topEpisodios.forEach(e ->
+                    System.out.printf("Série: %s - Temporada %s - Episódio %s - %s - avaliação: %s\n" ,
+                            e.getSerie().getTitulo() ,
+                            e.getTemporada() ,
+                            e.getNumeroEpisodio() ,
+                            e.getTitulo() ,
+                            e.getAvaliacao()
+                    )
+            );
         }
     }
 
@@ -65,12 +86,14 @@ public class Principal {
         String trechoEpisodio = sc.nextLine();
         List<Episodio> episodiosEncontrados = serieRepository.episodiosPorTrecho(trechoEpisodio);
 
+        System.out.println();
         episodiosEncontrados.forEach(e ->
-                System.out.printf("Série: %s - Temporada %s - Episódio %s - %s\n" ,
+                System.out.printf("Série: %s - Temporada %s - Episódio %s - %s - avaliação: %s\n" ,
                         e.getSerie().getTitulo() ,
                         e.getTemporada() ,
                         e.getNumeroEpisodio() ,
-                        e.getTitulo()
+                        e.getTitulo() ,
+                        e.getAvaliacao()
                 )
         );
     }
@@ -153,7 +176,7 @@ public class Principal {
     private void buscarSeriePorTitulo() {
         System.out.print("\nEscolha uma série pelo nome: ");
         String nomeSerie = sc.nextLine();
-        final Optional<Serie> serieBuscada = serieRepository.findByTituloContainingIgnoreCase(nomeSerie);
+        serieBuscada = serieRepository.findByTituloContainingIgnoreCase(nomeSerie);
 
         if (serieBuscada.isPresent()) {
             System.out.println("Dados da série: " + serieBuscada.get());
