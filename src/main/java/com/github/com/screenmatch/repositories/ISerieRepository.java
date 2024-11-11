@@ -47,4 +47,12 @@ public interface ISerieRepository extends JpaRepository<Serie , Long> {
             LIMIT 5
             """)
     List<Episodio> topEpisodiosPorSerie(Serie serie);
+
+    @Query("""
+            SELECT e FROM Serie s
+            JOIN s.episodios e
+            WHERE s = :serie
+            AND YEAR(e.dataLancamento) >= :anoLancamento
+            """)
+    List<Episodio> topEpisodiosPorSerieEAno(Serie serie , int anoLancamento);
 }

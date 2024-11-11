@@ -22,6 +22,7 @@ public class Mensagens {
                         11 - Series filtradas por JPQL
                         12 - Buscar Episodios por trecho
                         13 - Top Episódios por série
+                        14 - Buscar Episodios a partir de uma data
                         -
                         0 - Sair
                         """;

@@ -57,8 +57,22 @@ public class Principal {
                 case 11 -> seriePorTemporadaEAvaliacaoJPQL();
                 case 12 -> buscarEpisodioPorTrecho();
                 case 13 -> topEpisodiosPorSerie();
+                case 14 -> buscarEpisodiosAposData();
                 default -> System.out.println("Opção inválida!");
             }
+        }
+    }
+
+    private void buscarEpisodiosAposData() {
+        buscarSeriePorTitulo();
+        if (serieBuscada.isPresent()) {
+            final Serie serie = serieBuscada.get();
+            System.out.println("Digite o ano limite de lancamento");
+            final int anoLancamento = sc.nextInt();
+            sc.nextLine();
+
+            List<Episodio> episodiosAno = serieRepository.topEpisodiosPorSerieEAno(serie , anoLancamento);
+            episodiosAno.forEach(System.out::println);
         }
     }
 
