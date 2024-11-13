@@ -248,7 +248,7 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        var seriesDto = serieService.obterSeries();
+        var seriesDto = serieService.obterTodasAsSeries();
         seriesDto.stream()
 //                .sorted(Comparator.comparing(Serie::getGenero))
                 .sorted(Comparator.comparing(SerieResponseDTO::genero))

@@ -1,7 +1,6 @@
 package com.github.com.screenmatch.controllers;
 
 import com.github.com.screenmatch.dtos.SerieResponseDTO;
-import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.services.ISerieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,7 @@ public class SerieController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SerieResponseDTO>> obterSeries() {
-        return ResponseEntity.ok(serieService.obterSeries());
+    public ResponseEntity<List<SerieResponseDTO>> obterTodasAsSeries() {
+        return ResponseEntity.ok(serieService.obterTodasAsSeries());
     }
 }

@@ -5,6 +5,7 @@ import com.github.com.screenmatch.models.DadosSerie;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.repositories.ISerieRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,8 +19,11 @@ public class SerieService implements ISerieService {
     }
 
     @Override
-    public List<SerieResponseDTO> obterSeries() {
-        return serieRepository.findAll().stream().map(s -> new SerieResponseDTO(
+    @Transactional(readOnly = true)
+    public List<SerieResponseDTO> obterTodasAsSeries() {
+        return serieRepository.findAll()
+                .stream()
+                .map(s -> new SerieResponseDTO(
                 s.getId() ,
                 s.getTitulo() ,
                 s.getTotalTemporadas() ,
