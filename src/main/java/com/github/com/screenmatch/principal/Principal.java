@@ -1,5 +1,6 @@
 package com.github.com.screenmatch.principal;
 
+import com.github.com.screenmatch.dtos.SerieResponseDTO;
 import com.github.com.screenmatch.models.DadosSerie;
 import com.github.com.screenmatch.models.Episodio;
 import com.github.com.screenmatch.models.Serie;
@@ -247,9 +248,19 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        series = serieService.buscarSeries();
-        series.stream()
-                .sorted(Comparator.comparing(Serie::getGenero))
+        var seriesDto = serieService.obterSeries();
+        seriesDto.stream()
+               // .sorted(Comparator.comparing(Serie::getGenero))
+                .map(s -> new SerieResponseDTO(
+                        s.id() ,
+                        s.titulo() ,
+                        s.totalTemporadas() ,
+                        s.avaliacao() ,
+                        s.genero() ,
+                        s.atores() ,
+                        s.poster() ,
+                        s.sinopse()
+                ))
                 .forEach(System.out::println);
     }
 
