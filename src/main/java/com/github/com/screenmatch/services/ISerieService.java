@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface ISerieService {
     List<SerieResponseDTO> obterTodasAsSeries();
+    List<SerieResponseDTO> obterTop5Series();
     DadosSerie criarSerie(DadosSerie dadosSerie);
+
 }

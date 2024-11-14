@@ -4,6 +4,7 @@ import com.github.com.screenmatch.dtos.SerieResponseDTO;
 import com.github.com.screenmatch.models.DadosSerie;
 import com.github.com.screenmatch.models.Serie;
 import com.github.com.screenmatch.repositories.ISerieRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +22,13 @@ public class SerieService implements ISerieService {
     @Override
     @Transactional(readOnly = true)
     public List<SerieResponseDTO> obterTodasAsSeries() {
-        return serieRepository.findAll()
-                .stream()
-                .map(s -> new SerieResponseDTO(
-                s.getId() ,
-                s.getTitulo() ,
-                s.getTotalTemporadas() ,
-                s.getAvaliacao() ,
-                s.getGenero() ,
-                s.getAtores() ,
-                s.getPoster() ,
-                s.getSinopse()
-        )).toList();
+        return getList(serieRepository.findAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SerieResponseDTO> obterTop5Series() {
+        return getList(serieRepository.findTop5ByOrderByAvaliacaoDesc());
     }
 
     @Override
@@ -42,5 +38,12 @@ public class SerieService implements ISerieService {
         final Serie serieCriada = serieRepository.save(serieASerCriada);
       //  return new DadosSerie(serieCriada);
         return null;//serieCriada;
+    }
+
+    @NotNull
+    private List<SerieResponseDTO> getList(List<Serie> series) {
+        return series.stream()
+                .map(SerieResponseDTO::new)
+                .toList();
     }
 }

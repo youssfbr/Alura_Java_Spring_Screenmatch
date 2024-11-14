@@ -23,4 +23,9 @@ public class SerieController {
     public ResponseEntity<List<SerieResponseDTO>> obterTodasAsSeries() {
         return ResponseEntity.ok(serieService.obterTodasAsSeries());
     }
+
+    @GetMapping("/top5")
+    public ResponseEntity<List<SerieResponseDTO>> obterTop5Series() {
+        return ResponseEntity.ok(serieService.obterTop5Series());
+    }
 }
