@@ -64,6 +64,15 @@ public class SerieService implements ISerieService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<EpisodioResponseDTO> obterTemporadaPorNumero(Long serieId , Long temporadaId) {
+        return serieRepository.obterEpisodiosPorTemporada(serieId , temporadaId)
+                .stream()
+                .map(EpisodioResponseDTO::new)
+                .toList();
+    }
+
+    @Override
     public DadosSerie criarSerie(DadosSerie dadosSerie) {
 
         final Serie serieASerCriada = new Serie(dadosSerie);

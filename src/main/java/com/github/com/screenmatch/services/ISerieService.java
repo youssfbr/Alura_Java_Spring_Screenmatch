@@ -13,6 +13,7 @@ public interface ISerieService {
     List<SerieResponseDTO> encontrarEpisodiosMaisRecentes();
     SerieResponseDTO obterPorId(Long id);
     List<EpisodioResponseDTO> obterTodasTemporadas(Long id);
+    List<EpisodioResponseDTO> obterTemporadaPorNumero(Long serieId , Long temporadaId);
 
     DadosSerie criarSerie(DadosSerie dadosSerie);
 

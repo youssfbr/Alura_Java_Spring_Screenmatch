@@ -45,4 +45,11 @@ public class SerieController {
     public ResponseEntity<List<EpisodioResponseDTO>> obterTodasTemporadas(@PathVariable Long id) {
         return ResponseEntity.ok(serieService.obterTodasTemporadas(id));
     }
+
+    @GetMapping("/{serieId}/temporadas/{temporadaId}")
+    public ResponseEntity<List<EpisodioResponseDTO>> obterTemporadasPorNumero(
+            @PathVariable Long serieId ,
+            @PathVariable Long temporadaId) {
+        return ResponseEntity.ok(serieService.obterTemporadaPorNumero(serieId , temporadaId));
+    }
 }
