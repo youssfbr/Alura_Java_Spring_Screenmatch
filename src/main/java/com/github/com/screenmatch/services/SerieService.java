@@ -1,5 +1,6 @@
 package com.github.com.screenmatch.services;
 
+import com.github.com.screenmatch.dtos.EpisodioResponseDTO;
 import com.github.com.screenmatch.dtos.SerieResponseDTO;
 import com.github.com.screenmatch.models.DadosSerie;
 import com.github.com.screenmatch.models.Serie;
@@ -29,6 +30,37 @@ public class SerieService implements ISerieService {
     @Transactional(readOnly = true)
     public List<SerieResponseDTO> obterTop5Series() {
         return getList(serieRepository.findTop5ByOrderByAvaliacaoDesc());
+    }
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<SerieResponseDTO> obterLancamentos() {
+//        return getList(serieRepository.findTop5ByOrderByEpisodiosDataLancamentoDesc());
+//    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SerieResponseDTO> encontrarEpisodiosMaisRecentes() {
+        return getList(serieRepository.encontrarEpisodiosMaisRecentes());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SerieResponseDTO obterPorId(Long id) {
+        return serieRepository.findById(id)
+                .map(SerieResponseDTO::new)
+                .orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<EpisodioResponseDTO> obterTodasTemporadas(Long id) {
+        return serieRepository.findById(id)
+                .map(s -> s.getEpisodios()
+                        .stream()
+                        .map(EpisodioResponseDTO::new)
+                        .toList())
+                .orElse(null);
     }
 
     @Override
