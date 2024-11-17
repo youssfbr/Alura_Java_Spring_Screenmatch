@@ -11,7 +11,9 @@ public interface ISerieService {
     List<SerieResponseDTO> obterTop5Series();
 //    List<SerieResponseDTO> obterLancamentos();
     List<SerieResponseDTO> encontrarEpisodiosMaisRecentes();
+    List<SerieResponseDTO> obterSeriesPorCategoria(String categoriaNome);
     SerieResponseDTO obterPorId(Long id);
+
     List<EpisodioResponseDTO> obterTodasTemporadas(Long id);
     List<EpisodioResponseDTO> obterTemporadaPorNumero(Long serieId , Long temporadaId);
 

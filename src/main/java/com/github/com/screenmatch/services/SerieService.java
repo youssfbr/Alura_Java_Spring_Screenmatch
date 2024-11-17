@@ -4,6 +4,7 @@ import com.github.com.screenmatch.dtos.EpisodioResponseDTO;
 import com.github.com.screenmatch.dtos.SerieResponseDTO;
 import com.github.com.screenmatch.models.DadosSerie;
 import com.github.com.screenmatch.models.Serie;
+import com.github.com.screenmatch.models.enums.Categoria;
 import com.github.com.screenmatch.repositories.ISerieRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,13 @@ public class SerieService implements ISerieService {
     @Transactional(readOnly = true)
     public List<SerieResponseDTO> encontrarEpisodiosMaisRecentes() {
         return getList(serieRepository.encontrarEpisodiosMaisRecentes());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SerieResponseDTO> obterSeriesPorCategoria(String categoriaNome) {
+        final Categoria categoria = Categoria.fromStringPortugues(categoriaNome);
+        return getList(serieRepository.obterSeriesPorCategoria(categoria));
     }
 
     @Override

@@ -36,6 +36,11 @@ public class SerieController {
         return ResponseEntity.ok(serieService.encontrarEpisodiosMaisRecentes());
     }
 
+    @GetMapping("/categoria/{categoriaNome}")
+    public ResponseEntity<List<SerieResponseDTO>> obterSeriesPorCategoria(@PathVariable String categoriaNome) {
+        return ResponseEntity.ok(serieService.obterSeriesPorCategoria(categoriaNome));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<SerieResponseDTO> obterPorId(@PathVariable Long id) {
         return ResponseEntity.ok(serieService.obterPorId(id));
@@ -52,4 +57,5 @@ public class SerieController {
             @PathVariable Long temporadaId) {
         return ResponseEntity.ok(serieService.obterTemporadaPorNumero(serieId , temporadaId));
     }
+
 }

@@ -39,12 +39,16 @@ public interface ISerieRepository extends JpaRepository<Serie , Long> {
             "ORDER BY MAX(e.dataLancamento) DESC LIMIT 5")
     List<Serie> encontrarEpisodiosMaisRecentes();
 
+    // Poderia usar findByGenero(categoria)
+    @Query("SELECT s FROM Serie s " +
+            "WHERE s.genero = :categoria")
+    List<Serie> obterSeriesPorCategoria(Categoria categoria);
+
     @Query("""
             SELECT e FROM Serie s
             JOIN s.episodios e
             WHERE e.titulo 
-            ILIKE %:trechoEpisodio% 
-            """)
+            ILIKE %:trechoEpisodio%""")
     List<Episodio> episodiosPorTrecho(String trechoEpisodio);
 
     @Query("""
